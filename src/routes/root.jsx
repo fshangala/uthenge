@@ -2,12 +2,13 @@ import { Button } from "primereact/button"
 import { Menu } from "primereact/menu"
 import { Menubar } from "primereact/menubar"
 import { useContext, useRef } from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { UserContext } from "../contexts/user_context"
 
 export default function Root() {
   const user = useContext(UserContext)
   const userMenuRef = useRef(null)
+  const navigate = useNavigate()
 
   const menuItems = [
     {
@@ -24,19 +25,25 @@ export default function Root() {
     {
       label:"Login",
       icon:"pi pi-lock",
-      url:"/login/"
+      command: function(){
+        navigate("/login/")
+      }
     },
     {
       label:"Signup",
       icon:"pi pi-user-plus",
-      url:"/signup/"
+      command: function(){
+        navigate("/signup/")
+      }
     }
   ]
   const authenticatedPopupMenuItems = [
     {
       label:"Profile",
       icon:"pi pi-user",
-      url:"/profile/"
+      command: function(){
+        navigate("/profile/")
+      }
     },
     {
       label:"Logout",
