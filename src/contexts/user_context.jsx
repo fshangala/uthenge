@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { createContext, useEffect, useReducer } from "react";
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 export const UserContext = createContext(null)
 export const UserDispatch = createContext(null)
@@ -11,6 +12,7 @@ function userReducer(state,action) {
       return {
         ...state,
         session:action.session,
+        authentication_loading:false,
       }
   
     default:
@@ -21,6 +23,7 @@ function userReducer(state,action) {
 export default function UserProvider({children}) {
   const [userState,dispatch] = useReducer(userReducer,{
     session:null,
+    authentication_loading:true,
   })
   const supabase = createClient('https://pdpsjfzdzajvdlioooct.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkcHNqZnpkemFqdmRsaW9vb2N0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE2NTcwMjYsImV4cCI6MjAyNzIzMzAyNn0.21vFao5IQUpi09FbLkmeO-zlQo0lD4NX5sB-VMKbZr8')
 
@@ -48,7 +51,11 @@ export default function UserProvider({children}) {
     <SupabaseClient.Provider value={supabase}>
       <UserContext.Provider value={userState}>
         <UserDispatch.Provider value={dispatch}>
-          {children}
+          {userState.authentication_loading?(
+          <div style={{textAlign:"center"}}>
+            <ProgressSpinner />
+          </div>
+          ):children}
         </UserDispatch.Provider>
       </UserContext.Provider>
     </SupabaseClient.Provider>
