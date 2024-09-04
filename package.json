@@ -2,12 +2,15 @@
   "name": "uthenge",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://fshangala.github.io/uthenge/",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "vite build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.3",
@@ -26,6 +29,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "gh-pages": "^6.1.1",
     "vite": "^5.2.10",
     "vite-plugin-pwa": "^0.20.0",
     "workbox-core": "^7.1.0"

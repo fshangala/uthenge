@@ -33,4 +33,5 @@ export default defineConfig({
       type: 'module',
     },
   })],
+  base:"/uthenge/",
 })
