@@ -1,14 +1,45 @@
 import { Button } from "primereact/button"
 import { Menu } from "primereact/menu"
 import { Menubar } from "primereact/menubar"
-import { useContext, useRef } from "react"
+import { useContext, useReducer, useRef } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
-import { UserContext } from "../contexts/user_context"
+import { SupabaseClient, UserContext } from "../contexts/user_context"
+import { Toast } from "primereact/toast"
+import { BlockUI } from "primereact/blockui"
+import { ProgressSpinner } from "primereact/progressspinner"
+
+function rootReducer(state,action) {
+  switch (action.type) {
+    case 'set-loading':
+      return {
+        ...state,
+        loading:action.loading,
+      }
+  
+    default:
+      break;
+  }
+}
 
 export default function Root() {
   const user = useContext(UserContext)
   const userMenuRef = useRef(null)
   const navigate = useNavigate()
+  const supabase = useContext(SupabaseClient)
+  const toastRef = useRef(null)
+  const [componentState,dispatch] = useReducer(rootReducer,{
+    loading:false,
+  })
+
+  async function signout() {
+    dispatch({type:'set-loading',loading:true})
+    const {error} = await supabase.auth.signOut()
+    if(error) {
+      toastRef.current.show({severity:'error',summary:error.code,detail:error.message})
+      console.log(error.message)
+    }
+    dispatch({type:'set-loading',loading:false})
+  }
 
   const menuItems = [
     {
@@ -47,7 +78,10 @@ export default function Root() {
     },
     {
       label:"Logout",
-      icon:"pi pi-sign-out"
+      icon:"pi pi-sign-out",
+      command: function() {
+        signout()
+      }
     }
   ]
 
@@ -62,10 +96,13 @@ export default function Root() {
 
   return (
     <>
-    <Menubar model={menuItems} end={menuEnd} />
-    <main>
-      <Outlet />
-    </main>
+    <BlockUI blocked={componentState.loading} template={(<ProgressSpinner />)}>
+      <Menubar model={menuItems} end={menuEnd} />
+      <main>
+        <Outlet />
+      </main>
+    </BlockUI>
+    <Toast ref={toastRef} />
     </>
   )
 }
