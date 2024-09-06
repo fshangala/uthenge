@@ -11,6 +11,7 @@ import UserProvider from './contexts/user_context'
 import SignUp from './routes/auth/signup'
 import Login from './routes/auth/login'
 import Profile from './routes/auth/profile'
+import ManageStores from './routes/store/manage_stores'
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,13 @@ const router = createBrowserRouter([
       },
       {
         path:'profile/',
-        element:<Profile />
+        element:<Profile />,
+        children: [
+          {
+            path:"stores/",
+            element:<ManageStores />
+          }
+        ]
       }
     ]
   }
