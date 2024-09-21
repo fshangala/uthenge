@@ -14,10 +14,10 @@ export default function Profile() {
 
   const menuItems = [
     {
-      label:"Manage Stores",
-      icon:"pi pi-shop",
+      label:"Create store",
+      icon:"pi pi-plus",
       command: function() {
-        navigate("/profile/stores/")
+        navigate("/store-management/create/")
       }
     }
   ]

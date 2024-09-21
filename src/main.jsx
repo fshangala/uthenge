@@ -12,6 +12,10 @@ import SignUp from './routes/auth/signup'
 import Login from './routes/auth/login'
 import Profile from './routes/auth/profile'
 import ManageStores from './routes/store/manage_stores'
+import StoreManagementRoot from './routes/store/management/store_management_root'
+import StoreManagement from './routes/store/management/store_management'
+import StoreManagementDashboard from './routes/store/management/store_management_dashboard'
+import StoreManagementCreate from './routes/store/management/store_management_create'
 
 const router = createBrowserRouter([
   {
@@ -29,12 +33,25 @@ const router = createBrowserRouter([
       {
         path:'profile/',
         element:<Profile />,
+      }
+    ]
+  },{
+    path:"/store-management/",
+    element:<StoreManagementRoot />,
+    children: [
+      {
+        path:"id/:store_id/",
+        element: <StoreManagement />,
         children: [
           {
-            path:"stores/",
-            element:<ManageStores />
+            path:"dashboard/",
+            element:<StoreManagementDashboard />
           }
         ]
+      },
+      {
+        path:"create/",
+        element:<StoreManagementCreate />
       }
     ]
   }
